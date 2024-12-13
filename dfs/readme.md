@@ -1,9 +1,3 @@
-# Hello World!
+# DFS
 
-This is an example of using HTML and JavaScript in a README file.
-
-<div id="example"></div>
-
-<script>
-  document.getElementById('example').innerText = 'Hello from JavaScript!';
-</script>
+Show DFS in a grid to reach from random source to target
