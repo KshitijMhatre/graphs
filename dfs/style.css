@@ -18,6 +18,10 @@ h1 {
   justify-content: flex-start;
 }
 
+.menu {
+  height: 10%;
+}
+
 .container {
   width: 100%;
   height: 80%;
