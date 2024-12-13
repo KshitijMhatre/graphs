@@ -116,23 +116,46 @@ async function play() {
   shuffleButton.removeAttribute('hidden');
 }
 
+// DFS recursive
+// async function dfs([x,y], visited) {
+//   if (x===dest[0] && y===dest[1]){
+//     return true;
+//   }
+
+//   await visit(x,y);
+//   visited[x][y] = true;
+
+//   for(let move of moves){
+//     let nx = x + move[0]
+//     let ny = y + move[1]
+//     if(nx<col && nx>-1 && ny<row && ny>-1 && !visited[nx][ny]){
+//       let reached = await dfs([nx,ny], visited)
+//       if(reached) return true;
+//     }
+//   }
+//   return false;
+// }
+
+// DFS iterative
 async function dfs([x,y], visited) {
-  if (x===dest[0] && y===dest[1]){
-    return true;
-  }
+  const stack = [[x,y]]
 
-  await visit(x,y);
-  visited[x][y] = true;
+  while(stack.length) {
+    let [cx, cy] = stack.pop()
+    if(cx===dest[0] && cy===dest[1]) return true;
 
-  for(let move of moves){
-    let nx = x + move[0]
-    let ny = y + move[1]
-    if(nx<col && nx>-1 && ny<row && ny>-1 && !visited[nx][ny]){
-      let reached = await dfs([nx,ny], visited)
-      if(reached) return true;
+    visited[cx][cy] = true;
+    await visit(cx,cy);
+
+    for(let move of moves) {
+      const nx = cx + move[0]
+      const ny = cy + move[1]
+      if(nx<col && nx>-1 && ny<row && ny>-1 && !visited[nx][ny]){
+        stack.push([nx,ny]) 
+      }
     }
   }
-  return false;
+  return false
 }
 
 function shuffle() {
