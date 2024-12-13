@@ -109,30 +109,41 @@ async function play() {
   shuffleButton.setAttribute('hidden', true);
   
   const model = Array.from(Array(row), ()=>Array(col).fill(false))
-  await dfs(src, model);
+  await bfs(src, model);
   
   const resetButton = document.getElementById('reset');
   resetButton.removeAttribute('hidden');
   shuffleButton.removeAttribute('hidden');
 }
 
-async function dfs([x,y], visited) {
-  if (x===dest[0] && y===dest[1]){
-    return true;
-  }
-
+async function bfs([x,y], visited) {
+  
   await visit(x,y);
   visited[x][y] = true;
+  let exploreQueue = [[x,y]]
 
-  for(let move of moves){
-    let nx = x + move[0]
-    let ny = y + move[1]
-    if(nx<col && nx>-1 && ny<row && ny>-1 && !visited[nx][ny]){
-      let reached = await dfs([nx,ny], visited)
-      if(reached) return true;
-    }
+  while(exploreQueue.length) {
+    // tracks completion of given depth
+    // let depthSize = exploreQueue.length
+    // while(depthSize--) {
+      let current = exploreQueue.shift() // dequeue FIFO
+      let [cx,cy] = current;
+      if(cx===dest[0] && cy===dest[1]) {
+        break;
+      }
+  
+      for(let move of moves) {
+        const nx = cx + move[0]
+        const ny = cy + move[1]
+  
+        if (nx>-1 && nx<row && ny>-1 && ny<col && !visited[nx][ny]){
+          await visit(nx,ny)
+          visited[nx][ny] = true; // marked visited before exploring - as neighbors will try to visit same  
+          exploreQueue.push([nx,ny])
+        }
+      }
+    // }
   }
-  return false;
 }
 
 function shuffle() {
