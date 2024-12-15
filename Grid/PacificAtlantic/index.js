@@ -26,8 +26,10 @@ const MOVES = {
 }
 
 let moves = MOVES.CLOCKWISE_START_LEFT; 
-const heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
-const maxHeight = Math.max(...heights.flatMap(row=>row))
+// const heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+// const maxHeight = Math.max(...heights.flatMap(row=>row))
+const maxHeight = 30
+const heights = Array.from(Array(15), () => Array.from(Array(15), () => Math.ceil(Math.random()*(maxHeight-1))))
 const ROW = heights.length;
 const COL = heights[0].length;
 
@@ -75,23 +77,68 @@ function setup(){
 
   const graph = document.getElementById('graph');
   graph.appendChild(fragment);
+
+  solve()
 }
 
 async function sleep(ms) {
   await new Promise((res)=>setTimeout(res, ms));
 }
 
-async function visit(i,j, islandId) {
+async function visit(i,j, value) {
   const cell = document.getElementById(getId(i,j))
-  cell.classList.add(islandId)
   await sleep(10);
-  cell.classList.remove(CLASSES.NEW);
-  cell.classList.add(CLASSES.VISITED);
-  
-  setTimeout(()=>{
-    cell.classList.remove(CLASSES.VISITED);
-    cell.classList.add(CLASSES.NEW);
-  }, 600)
+  cell.style.backgroundColor = value;
+}
+
+async function solve() {
+
+  const isPacificReachable = Array.from(Array(ROW), ()=> Array(COL).fill(false))
+  const isAtlanticReachable = Array.from(Array(ROW), ()=> Array(COL).fill(false))
+
+  const pacificHue = 120;
+  const atlanticHue = 240;
+  const overlapHue = 180;
+
+  async function dfs([x,y], visited, hue) {
+    const stack = [[x,y]]
+    while(stack.length) {
+      const [cx,cy] = stack.pop()
+      visited[cx][cy] = true
+      await visit(cx,cy, getColorValue(heights[cx][cy], maxHeight, hue, 100));
+
+      for(let move of moves){
+        const nx = cx + move[0]
+        const ny = cy + move[1]
+        if(
+          nx > -1 && nx < ROW && ny > -1 && ny < COL
+          && !visited[nx][ny]
+          && heights[nx][ny]>=heights[cx][cy]
+        ){
+          stack.push([nx,ny])
+        }
+      }
+    } 
+  }
+
+  for(i=0;i<ROW;i++){
+    await dfs([i, 0], isPacificReachable, pacificHue) // left edge
+    await dfs([i, COL-1], isAtlanticReachable, atlanticHue) // right edge
+  }
+
+  for(let j=0;j<COL;j++) {
+    await dfs([0, j], isPacificReachable, pacificHue) // top edge
+    await dfs([ROW-1, j], isAtlanticReachable, atlanticHue) // top edge
+  }
+
+  for(let i=0;i<ROW;i++){
+    for(let j=0;j<COL;j++){
+      if(isAtlanticReachable[i][j] && isPacificReachable[i][j]){
+        await visit(i,j, getColorValue(heights[i][j], maxHeight, overlapHue, 100));
+        // BFS from these points to show flow to both :)
+      }
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', setup);
