@@ -1,0 +1,124 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+
+  height: 100vh;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  background-color: antiquewhite;
+}
+
+.vertical {
+  height: 100vh;
+}
+
+.content {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.horizontal > .label {
+  align-content: center;
+}
+
+#info {
+  padding-left: 10px;
+  height: 100vh;
+  width: 20%;
+  background-color: black;
+  color: azure;
+
+  overflow-y: auto;  
+}
+
+h1 {
+  margin: 20px;
+  justify-content: flex-start;
+}
+
+.menu {
+  height: 10%;
+  width: 100%;
+  display: flex;
+
+  justify-content: center;
+  align-content: center;
+}
+
+.menu > button {
+  flex-grow: 1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 1pc;
+  
+  border-style: hidden;
+  background-color: chocolate;
+}
+
+.menu > button > icon {
+  /* width: 100%;
+  height: auto; */
+
+  background-color: azure;
+  margin: 10px;
+  padding: 5px;
+}
+
+.container {
+  max-width: 800px;
+  padding: 20px;
+
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  justify-content: center;
+}
+
+.cell {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #000;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+
+  /* background-color: hsl(240, 100%, 54%); */
+}
+
+.cell-new {
+  background-color: grey;
+}
+
+.cell-visited {
+  background-color: chocolate;
+}
+
+.cell-ocean {
+  background-color: aqua;
+}
+
+.cell-in-progress {
+  background-color: green;
+}
