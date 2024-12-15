@@ -76,8 +76,9 @@ function setup(){
   container.appendChild(fragment);
 
   container.addEventListener('click',(e)=>{
-    if(getPt(e.target.id).length && !e.target.classList.contains(CLASSES.BRICK)) {
+    if(getPt(e.target.id).length === 2 && !e.target.classList.contains(CLASSES.BRICK)) {
       clear()
+      moves = Object.values(MOVES)[Math.round(Math.random()*3)]
       e.target.classList.add('entrance'); // marker class id already used
       e.target.innerText = '💁🏽‍♂️'
       solve(getPt(e.target.id))
@@ -154,7 +155,7 @@ async function highlightPath([cx,cy], parents) {
   await sleep(1000)
 
   Array.from(document.getElementsByClassName(CLASSES.VISITED)).forEach(el=>el.classList.remove(CLASSES.VISITED))
-  console.log(path)
+  // console.log(path)
   for(step of path){
     await visit(...step, 100)
   }
