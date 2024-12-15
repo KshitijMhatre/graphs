@@ -33,6 +33,16 @@ const heights = Array.from(Array(15), () => Array.from(Array(15), () => Math.cei
 const ROW = heights.length;
 const COL = heights[0].length;
 
+function buildPipe() {
+  for(let i=0;i<ROW && i<COL;i++){
+    heights[i][i] = 1
+    if((i-1) > -1) {
+      heights[i-1][i] = 1
+      heights[i][i-1] = 1
+    }
+  }
+}
+
 const getId = (i,j) => `${i}-${j}`;
 const getPt = str => str.split('-').map((o)=>Number(o));
 const CLASSES = {
@@ -77,6 +87,9 @@ function setup(){
 
   const graph = document.getElementById('graph');
   graph.appendChild(fragment);
+
+  if(Math.random()*10 > 5)  // 50% chance of a diagonal pipe
+    buildPipe()
 
   solve()
 }
